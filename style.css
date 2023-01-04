@@ -1,3 +1,16 @@
+body {
+  overflow: hidden;
+  --color-text: #fff;
+  --color-bg: #000;
+  --color-link: #4b4b4b;
+  --color-link-hover: #fff;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-family: laca-text, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 #block {
   height: 100px;
   width: 100px;
