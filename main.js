@@ -6,6 +6,7 @@ let position = 0;
 let rounded = 0;
 let diff = 0;
 let block = document.getElementById('block');
+let wrap = document.getElementById('wrap');
 let elems = [...document.querySelectorAll('.n')];
 let objs = Array(5).fill({dist : 0});
 
@@ -21,9 +22,9 @@ function animate() {
   
   // Create a state
   objs.forEach((o, i) => {
-    o.dist = position - i;
-    o.dist = Math.abs(o.dist);
-    elems[i].style.transform = `scale(${o.dist})`;
+    o.dist = Math.min(Math.abs(position - i), 1);
+    o.dist = 1 - o.dist**2;
+    elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
   });
 
   // Generate sticky scroll
@@ -32,7 +33,8 @@ function animate() {
   position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.015;
   
   // Update DOM
-  block.style.transform = `translate(0, ${position * 100 + 50}px)`;
+  // block.style.transform = `translate(0, ${position * 100 + 50}px)`;
+  wrap.style.transform = `translate(0, ${-position * 100 + 50}px)`;
   window.requestAnimationFrame(animate);
 }
 

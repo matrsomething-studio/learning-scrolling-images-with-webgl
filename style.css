@@ -17,6 +17,8 @@ body {
   width: 200px;
   height: 10px;
   background-color: aliceblue;
+  transform-origin: 0 0;
+  will-change: transform;
 }
 
 .n1 {
@@ -36,6 +38,7 @@ body {
 }
 
 #block {
+  will-change: transform;
   height: 100px;
   width: 100px;
   background-color: coral;
