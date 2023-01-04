@@ -1,5 +1,4 @@
 import './style.css'
-
 import * as THREE from 'three';
 
 let speed = 0;
@@ -7,6 +6,8 @@ let position = 0;
 let rounded = 0;
 let diff = 0;
 let block = document.getElementById('block');
+let elems = [...document.querySelectorAll('.n')];
+let objs = Array(5).fill({dist : 0});
 
 window.addEventListener('wheel', (e) => {
   speed += e.deltaY * 0.0003;
@@ -14,11 +15,24 @@ window.addEventListener('wheel', (e) => {
 
 function animate() {
   position += speed;
-  speed *= 0.8; // Create inertia 
+
+  // Create inertia 
+  speed *= 0.8; 
+  
+  // Create a state
+  objs.forEach((o, i) => {
+    o.dist = position - i;
+    o.dist = Math.abs(o.dist);
+    elems[i].style.transform = `scale(${o.dist})`;
+  });
+
+  // Generate sticky scroll
   rounded = Math.round(position);
-  diff = rounded - position; // Generate sticky scroll
-  position += diff * 0.025;
-  block.style.transform = `translate(0, ${position*100}px)`;
+  diff = rounded - position; 
+  position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.015;
+  
+  // Update DOM
+  block.style.transform = `translate(0, ${position * 100 + 50}px)`;
   window.requestAnimationFrame(animate);
 }
 

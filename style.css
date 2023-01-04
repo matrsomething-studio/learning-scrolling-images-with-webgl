@@ -14,7 +14,7 @@ body {
 .n {
   position: absolute;
   top: 100px;
-  width: 10px;
+  width: 200px;
   height: 10px;
   background-color: aliceblue;
 }
