@@ -4,6 +4,7 @@ import * as THREE from 'three';
 
 let speed = 0;
 let position = 0;
+let rounded = 0;
 let block = document.getElementById('block');
 
 window.addEventListener('wheel', (e) => {
@@ -13,6 +14,13 @@ window.addEventListener('wheel', (e) => {
 function animate() {
   position += speed;
   speed *= 0.8; // Create inertia 
+
+  rounded = Math.round(position);
+  
+  let diff = rounded - position;
+
+  position += diff * 0.025;
+
   block.style.transform = `translate(0, ${position*100}px)`;
   window.requestAnimationFrame(animate);
 }
