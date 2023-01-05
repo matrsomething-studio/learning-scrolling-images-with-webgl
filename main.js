@@ -1,6 +1,8 @@
 import './style.css'
 import Sketch from './module';
 
+let sketch = new Sketch({dom: document.querySelector("#scene")});
+
 let speed = 0;
 let position = 0;
 let rounded = 0;
@@ -39,5 +41,3 @@ function animate() {
 }
 
 animate();
-
-new Sketch({dom: document.querySelector("#scene")});

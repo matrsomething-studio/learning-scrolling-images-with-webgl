@@ -9,20 +9,21 @@ import * as dat from "dat.gui"
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default class Sketch {
-    constructor(options){
+    constructor(selector){
         this.scene = new THREE.Scene();
 
-        this.container = options.dom;
-        this.width = this.container.offsetWidth;
-        this.height = this.container.offsetHeight;
-
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(this.width, this.height);
-        this.renderer.setClearColor(0xeeeeee, 0);
-        this.renderer.physicallyCorrectLights = true;
+        this.renderer.sortObjects = false;
         this.renderer.outputEncoding = THREE.sRGBEncoding;
-
+        
+        this.container = selector.dom;
         this.container.appendChild(this.renderer.domElement);
 
         this.camera = new THREE.PerspectiveCamera(
@@ -32,16 +33,34 @@ export default class Sketch {
             1000
         );
 
-        this.camera.position.set(0, 0, 2);
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.camera.position.set(0, 0, 2);  
+        this.camera.lookAt(0, 0, 0);
         this.time = 0;
-
-        this.isPlaying = true;
+        this.speed = 0;
+        this.targetSpeed = 0;
+        this.mouse = new THREE.Vector2();
+        this.followMouse = new THREE.Vector2();
+        this.prevMouse = new THREE.Vector2();
+        
+        this.paused = false;
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        
+        this.settings();
+        this.setupResize();
+        this.mouseMove();
 
         this.addObjects();
         this.resize();
         this.render();
-        this.setupResize();
+    }
+
+    mouseMove(){
+        let that = this;
+        this.container.addEventListener('mousemove', ( e ) => {
+            // mousemove / touchmove
+            this.mouse.x = ( e.clientX / window.innerWidth ) ;
+            this.mouse.y = 1. - ( e.clientY / window.innerHeight );
+        });
     }
 
     settings(){
@@ -49,7 +68,7 @@ export default class Sketch {
         this.settings = {
             progress: 0
         };
-        this.gui = new DataTransfer.GUI();
+        this.gui = new dat.GUI();
         this.gui.add(this.settings, "progress", 0, 1, 0.01);
     }
 
@@ -58,10 +77,10 @@ export default class Sketch {
     }
 
     resize(){
-        this.width = this.container.offsetWidth;
-        this.height = this.container.offsetHeight;
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
         this.renderer.setSize(this.width, this.height);
-        this.camera.aspect = this.width/this.height;
+        this.camera.aspect = this.width / this.height;
 
         this.imageAspect = 853/1280;
         let a1, a2;
@@ -83,9 +102,10 @@ export default class Sketch {
 
     addObjects(){
         let that = this;
+        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         this.material = new THREE.ShaderMaterial({
             extensions: {
-                derivatives: "#extension GL_OES_standard_derivative : enable"
+                derivatives: "#extension GL_OES_standard_derivatives : enable"
             },
             side: THREE.DoubleSide,
             uniforms: {
@@ -95,30 +115,24 @@ export default class Sketch {
                     value: new THREE.Vector2(1 ,1)
                 }
             },
-            // vertexShader: vertex,
-            // fragmentShader: fragment
+            // vertexShader: require('./vertex.glsl'),
+            // fragmentShader: require('./shader.glsl')
         });
 
-        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         this.plane = new THREE.Mesh(this.geometry, this.material);
         this.scene.add(this.plane);
     }
 
-    stop(){
-        this.isPlaying = false;
+    stop() {
+        this.paused = true;
     }
 
-    play(){
-        if(!this.isPlaying){
-            this.render();
-            this.isPlaying = true;
-        }
+    play() {
+        this.paused = false;
+        this.render();
     }
 
     render(){
-        if(!this.isPlaying){
-            return;
-        }
         this.time += 0.05;
         this.material.uniforms.time.value = this.time;
         requestAnimationFrame(this.render.bind(this));
