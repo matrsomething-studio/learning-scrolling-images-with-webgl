@@ -43,7 +43,7 @@ export default class Sketch {
         this.prevMouse = new THREE.Vector2();
         
         this.paused = false;
-        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         
         this.settings();
         this.setupResize();
@@ -52,6 +52,23 @@ export default class Sketch {
         this.addObjects();
         this.resize();
         this.render();
+
+        this.handleImages();
+    }
+
+    handleImages() {
+        this.images = [...document.querySelectorAll('.n img')];
+        this.images.forEach((img, i) => {
+            let mat = this.material.clone();
+            mat.uniforms.texture1.value = new THREE.Texture(img);
+            mat.uniforms.texture1.value.needsUpdate = true;
+
+            // 1.5 aspect ratio of image
+            let geo = new THREE.PlaneGeometry(1.5, 1, 20, 20);
+            let mesh = new THREE.Mesh(geo, mat);
+            this.scene.add(mesh);
+            mesh.position.y = i * 1.2;
+        });
     }
 
     mouseMove(){
@@ -102,9 +119,7 @@ export default class Sketch {
 
     addObjects(){
         let that = this;
-        this.geometry = new THREE.PlaneGeometry(2, 1.2, 1, 1);
-        this.geometry1 = new THREE.PlaneGeometry(2, 1.2, 1, 1);
-        this.geometry2 = new THREE.PlaneGeometry(2, 1.2, 1, 1);
+        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
 
         this.material = new THREE.ShaderMaterial({
             extensions: {
@@ -112,7 +127,8 @@ export default class Sketch {
             },
             side: THREE.DoubleSide,
             uniforms: {
-                time: { type: "f", value: 0},
+                time: { type: "f", value: 0 },
+                texture1: {type: "t", value: null },
                 resolution: { type: "v4", value: new THREE.Vector4() },
                 uvRate1: {
                     value: new THREE.Vector2(1 ,1)
@@ -123,8 +139,6 @@ export default class Sketch {
         });
 
         this.plane = new THREE.Mesh(this.geometry, this.material);
-        // this.plane.rotation.x = -.15;
-        // this.plane.rotation.z = -.15;
         this.scene.add(this.plane);
     }
 

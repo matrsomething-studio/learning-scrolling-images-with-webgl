@@ -1,7 +1,7 @@
 body {
   overflow: hidden;
   --color-text: #fff;
-  --color-bg: #000;
+  --color-bg: rgb(53, 53, 53);
   --color-link: #4b4b4b;
   --color-link-hover: #fff;
   color: var(--color-text);
@@ -17,6 +17,8 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .n {
