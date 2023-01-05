@@ -33,10 +33,18 @@ function animate() {
   rounded = Math.round(position);
   diff = rounded - position; 
   position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.015;
-  
+
+  sketch.plane.position.y = position;
+  sketch.plane.position.x = position;
+  sketch.plane.position.z = position;
+
+  sketch.plane.rotation.y = position;
+  sketch.plane.rotation.x = position;
+  sketch.plane.rotation.z = position;
+
   // Update DOM
   // block.style.transform = `translate(0, ${position * 100 + 50}px)`;
-  wrap.style.transform = `translate(0, ${-position * 100 + 50}px)`;
+  // wrap.style.transform = `translate(0, ${-position * 100 + 50}px)`;
   window.requestAnimationFrame(animate);
 }
 

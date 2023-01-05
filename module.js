@@ -43,7 +43,7 @@ export default class Sketch {
         this.prevMouse = new THREE.Vector2();
         
         this.paused = false;
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         
         this.settings();
         this.setupResize();
@@ -102,7 +102,10 @@ export default class Sketch {
 
     addObjects(){
         let that = this;
-        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+        this.geometry = new THREE.PlaneGeometry(2, 1.2, 1, 1);
+        this.geometry1 = new THREE.PlaneGeometry(2, 1.2, 1, 1);
+        this.geometry2 = new THREE.PlaneGeometry(2, 1.2, 1, 1);
+
         this.material = new THREE.ShaderMaterial({
             extensions: {
                 derivatives: "#extension GL_OES_standard_derivatives : enable"
@@ -120,6 +123,8 @@ export default class Sketch {
         });
 
         this.plane = new THREE.Mesh(this.geometry, this.material);
+        // this.plane.rotation.x = -.15;
+        // this.plane.rotation.z = -.15;
         this.scene.add(this.plane);
     }
 
