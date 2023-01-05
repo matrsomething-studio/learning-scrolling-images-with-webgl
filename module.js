@@ -44,30 +44,36 @@ export default class Sketch {
         
         this.paused = false;
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+        this.materials = [];
+        this.meshes = [];
         
-        this.settings();
+        // this.settings();
         this.setupResize();
         this.mouseMove();
 
         this.addObjects();
         this.resize();
         this.render();
-
         this.handleImages();
     }
 
     handleImages() {
-        this.images = [...document.querySelectorAll('.n img')];
-        this.images.forEach((img, i) => {
+        this.images = [...document.querySelectorAll('img')];
+        this.images.forEach((img, index) => {
             let mat = this.material.clone();
-            mat.uniforms.texture1.value = new THREE.Texture(img);
+            this.materials.push(mat);
+            mat.uniforms.texture1.value = new THREE.TextureLoader().load(img.attributes[0].value);
             mat.uniforms.texture1.value.needsUpdate = true;
+
+            console.log(mat.uniforms);
 
             // 1.5 aspect ratio of image
             let geo = new THREE.PlaneGeometry(1.5, 1, 20, 20);
             let mesh = new THREE.Mesh(geo, mat);
             this.scene.add(mesh);
-            mesh.position.y = i * 1.2;
+            this.meshes.push(mesh);
+            mesh.position.y = index * 1.2;
         });
     }
 
@@ -119,8 +125,7 @@ export default class Sketch {
 
     addObjects(){
         let that = this;
-        this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
-
+        // this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         this.material = new THREE.ShaderMaterial({
             extensions: {
                 derivatives: "#extension GL_OES_standard_derivatives : enable"
@@ -128,18 +133,17 @@ export default class Sketch {
             side: THREE.DoubleSide,
             uniforms: {
                 time: { type: "f", value: 0 },
-                texture1: {type: "t", value: null },
+                texture1: { type: "t", value: null },
                 resolution: { type: "v4", value: new THREE.Vector4() },
                 uvRate1: {
-                    value: new THREE.Vector2(1 ,1)
+                    value: new THREE.Vector2(1, 1)
                 }
             },
+            // wireframe: true,
+            // transparent: true,
             vertexShader: vertex,
             fragmentShader: fragment
         });
-
-        this.plane = new THREE.Mesh(this.geometry, this.material);
-        this.scene.add(this.plane);
     }
 
     stop() {
@@ -153,7 +157,14 @@ export default class Sketch {
 
     render(){
         this.time += 0.05;
-        this.material.uniforms.time.value = this.time;
+        
+        if (this.materials) {
+            this.materials.forEach(m => {
+                m.uniforms.time.value = this.time;
+            });
+        }
+        
+        // this.material.uniforms.time.value = this.time;
         requestAnimationFrame(this.render.bind(this));
         this.renderer.render(this.scene, this.camera);
     }
