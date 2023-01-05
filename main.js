@@ -1,5 +1,5 @@
 import './style.css'
-import * as THREE from 'three';
+import Sketch from './module';
 
 let speed = 0;
 let position = 0;
@@ -39,3 +39,5 @@ function animate() {
 }
 
 animate();
+
+new Sketch({dom: document.querySelector("#scene")});
