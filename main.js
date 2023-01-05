@@ -27,6 +27,9 @@ function animate() {
     o.dist = Math.min(Math.abs(position - i), 1);
     o.dist = 1 - o.dist**2;
     elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
+    let scale = 1 + 0.24*o.dist;
+    sketch.meshes[i].position.y = i * 1.2 - position * 1.2;
+    sketch.meshes[i].scale.set(scale, scale, scale);
   });
 
   // Generate sticky scroll
