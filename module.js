@@ -1,8 +1,8 @@
 import * as THREE from "three";
 // import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js"
 
-// import fragment from "./shader/fragment.glsl"
-// import vertex from "./shader/vertex.glsl"
+import fragment from "./shader/fragment.glsl"
+import vertex from "./shader/vertex.glsl"
 import * as dat from "dat.gui"
 
 // import { TimelineMax } from "gsap";
@@ -115,8 +115,8 @@ export default class Sketch {
                     value: new THREE.Vector2(1 ,1)
                 }
             },
-            // vertexShader: require('./vertex.glsl'),
-            // fragmentShader: require('./shader.glsl')
+            vertexShader: vertex,
+            fragmentShader: fragment
         });
 
         this.plane = new THREE.Mesh(this.geometry, this.material);
