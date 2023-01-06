@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 // import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js"
 
-import fragment from "./shader/fragment.glsl"
-import vertex from "./shader/vertex.glsl"
-import * as dat from "dat.gui"
+import fragment from './shader/fragment.glsl'
+import vertex from './shader/vertex.glsl'
+import * as dat from 'dat.gui'
 
 // import { TimelineMax } from "gsap";
 import {
@@ -24,26 +24,26 @@ export default class Sketch {
         this.meshes = [];
         this.groups = [];
 
-        // Init
+        // Methods
         this.settings();
         this.setScene();
         this.setRenderer();
         this.setCamera();
         this.setControls();
-        this.createObjects();
+        this.createMaterial();
         this.setImages();
+        this.bindEvents();
         this.handleResize();
-        this.resize();
         this.animate();
     }
 
     settings() {
-        let that = this;
+        // DAT GUI - https://github.com/dataarts/dat.gui
         this.settings = {
             progress: 0
         };
         this.gui = new dat.GUI();
-        this.gui.add(this.settings, "progress", 0, 1, 0.01);
+        this.gui.add(this.settings, 'progress', 0, 1, 0.01);
     }
 
     setScene() {
@@ -107,8 +107,7 @@ export default class Sketch {
         });
     }
 
-    createObjects() {
-        let that = this;
+    createMaterial() {
         this.material = new THREE.ShaderMaterial({
             extensions: {
                 derivatives: "#extension GL_OES_standard_derivatives : enable"
@@ -143,17 +142,13 @@ export default class Sketch {
     }
 
     handleResize() {
-        window.addEventListener('resize', this.resize.bind(this));
-    }
-
-    resize() {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.renderer.setSize(this.width, this.height);
         this.camera.aspect = this.width / this.height;
 
         let a1, a2;
-        this.imageAspect = 853 / 1280;
+        this.imageAspect = 1080 / 1920;
 
         if (this.camera.aspect > this.imageAspect) {
             a1 = (this.width / this.height) * this.imageAspect;
@@ -170,6 +165,10 @@ export default class Sketch {
 
         this.camera.aspect = this.width / this.height;
         this.camera.updateProjectionMatrix();
+    }
+
+    bindEvents() {
+        window.addEventListener('resize', this.handleResize.bind(this));
     }
 
     stop() {
