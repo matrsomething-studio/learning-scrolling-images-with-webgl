@@ -20,17 +20,18 @@ export default class Sketch {
         this.requestID = null;
         this.time = 0;
         this.speed = 0;
-        this.materials = [];
+        this.meshGroup = new THREE.Group();
         this.meshes = [];
-        this.groups = [];
-
+        this.materials = [];
+        
+    
         // Methods
         this.setScene();
         this.setRenderer();
         this.setCamera();
         this.setControls();
         this.createMaterial();
-        this.setImages();
+        this.createObjects();
         this.bindEvents();
         this.handleResize();
         this.animate();
@@ -40,7 +41,7 @@ export default class Sketch {
     createGUI() {
         // DAT GUI - https://github.com/dataarts/dat.gui
         this.GUI = new dat.GUI();
-        this.groups.forEach((mesh, indx) => {
+        this.meshes.forEach((mesh, indx) => {
             let folder = this.GUI.addFolder(`Card 00${indx}`);
             let rotationMax = Math.PI * 2;
             folder.add(mesh.rotation, "x", 0, rotationMax, 0.01); 
@@ -88,13 +89,12 @@ export default class Sketch {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     }
 
-    setImages() {
+    createObjects() {
         this.images = [...document.querySelectorAll('img')];
         this.images.forEach((img, index) => {
             let mat = this.material.clone();
             this.materials.push(mat);
-            
-            let group = new THREE.Group();
+
             mat.uniforms.texture1.value = new THREE.TextureLoader().load(img.attributes[0].value);
             mat.uniforms.texture1.value.needsUpdate = true;
 
@@ -102,15 +102,14 @@ export default class Sketch {
             let geo = new THREE.PlaneGeometry(1.5, 1, 20, 20);
             let mesh = new THREE.Mesh(geo, mat);
             
-            group.add(mesh);
-            group.rotation.x = -.3;
-            group.rotation.y = -.3;
-            group.rotation.z = -.1;
-
-            this.groups.push(group);
+            this.meshGroup.add(mesh);
             this.meshes.push(mesh);    
-            this.scene.add(group);        
         });
+
+        this.scene.add(this.meshGroup);  
+        this.meshGroup.rotation.x = -.3;
+        this.meshGroup.rotation.y = -.3;
+        this.meshGroup.rotation.z = -.1;
     }
 
     createMaterial() {

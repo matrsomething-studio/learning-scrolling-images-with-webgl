@@ -8,7 +8,7 @@ varying vec3 vPosition;
 float PI = 3.14159265359;
 
 void main() {
-    vec4 t = texture2D(texture1, vUv) * distanceFromCenter;
+    vec4 t = texture2D(texture1, vUv);
     float bw = (t.r + t.b + t.g)/3.0;
     vec4 another = vec4(bw, bw, bw, 1.0);
     // gl_FragColor = t;
