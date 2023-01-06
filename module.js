@@ -25,7 +25,6 @@ export default class Sketch {
         this.groups = [];
 
         // Methods
-        this.settings();
         this.setScene();
         this.setRenderer();
         this.setCamera();
@@ -35,15 +34,21 @@ export default class Sketch {
         this.bindEvents();
         this.handleResize();
         this.animate();
+        this.createGUI();
     }
 
-    settings() {
+    createGUI() {
         // DAT GUI - https://github.com/dataarts/dat.gui
-        this.settings = {
-            progress: 0
-        };
-        this.gui = new dat.GUI();
-        this.gui.add(this.settings, 'progress', 0, 1, 0.01);
+        this.GUI = new dat.GUI();
+        this.groups.forEach((mesh, indx) => {
+            let folder = this.GUI.addFolder(`Card 00${indx}`);
+            let rotationMax = Math.PI * 2;
+            folder.add(mesh.rotation, "x", 0, rotationMax, 0.01); 
+            folder.add(mesh.rotation, "y", 0, rotationMax, 0.01); 
+            folder.add(mesh.rotation, "z", 0, rotationMax, 0.01); 
+            folder.add(mesh, "visible", 0, 1, 0.01); 
+            folder.open();
+        });
     }
 
     setScene() {
@@ -88,6 +93,7 @@ export default class Sketch {
         this.images.forEach((img, index) => {
             let mat = this.material.clone();
             this.materials.push(mat);
+            
             let group = new THREE.Group();
             mat.uniforms.texture1.value = new THREE.TextureLoader().load(img.attributes[0].value);
             mat.uniforms.texture1.value.needsUpdate = true;
@@ -95,15 +101,15 @@ export default class Sketch {
             // 1.5 aspect ratio of image
             let geo = new THREE.PlaneGeometry(1.5, 1, 20, 20);
             let mesh = new THREE.Mesh(geo, mat);
+            
             group.add(mesh);
-            this.groups.push(group);
-            this.scene.add(group);
-            this.meshes.push(mesh);
-            mesh.position.y = index * 1.2;
-
             group.rotation.x = -.3;
             group.rotation.y = -.3;
             group.rotation.z = -.1;
+
+            this.groups.push(group);
+            this.meshes.push(mesh);    
+            this.scene.add(group);        
         });
     }
 
