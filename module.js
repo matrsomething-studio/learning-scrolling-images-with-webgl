@@ -6,56 +6,63 @@ import vertex from "./shader/vertex.glsl"
 import * as dat from "dat.gui"
 
 // import { TimelineMax } from "gsap";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import {
+    OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls'
 
 export default class Sketch {
-    constructor(selector){
-        this.scene = new THREE.Scene();
-
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true
-        });
+    constructor(options) {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.renderer.setPixelRatio(window.devicePixelRatio);
-        this.renderer.setSize(this.width, this.height);
-        this.renderer.sortObjects = false;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
-        
-        this.container = selector.dom;
-        this.container.appendChild(this.renderer.domElement);
-
-        this.camera = new THREE.PerspectiveCamera(
-            70,
-            window.innerWidth / window.innerHeight,
-            0.001,
-            1000
-        );
-
-        this.camera.position.set(0, 0, 2);  
-        this.camera.lookAt(0, 0, 0);
         this.time = 0;
         this.speed = 0;
         this.targetSpeed = 0;
         this.mouse = new THREE.Vector2();
         this.followMouse = new THREE.Vector2();
         this.prevMouse = new THREE.Vector2();
-        
+
         this.paused = false;
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
         this.materials = [];
         this.meshes = [];
         this.groups = [];
+
+        // https://threejs.org/docs/?q=Scene#api/en/scenes/Scene
+        this.scene = new THREE.Scene();
+
+        // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(this.width, this.height);
+        this.renderer.sortObjects = false;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+
+        this.container = options.dom;
+        this.container.appendChild(this.renderer.domElement);
+
+        // https://threejs.org/docs/?q=PerspectiveCamera#api/en/cameras/PerspectiveCamera
+        this.camera = new THREE.PerspectiveCamera(
+            70,
+            this.width / this.width,
+            0.001,
+            1000
+        );
+        this.camera.position.set(0, 0, 2);
+        this.camera.lookAt(0, 0, 0);
+
+        // https://threejs.org/docs/?q=OrbitControls#examples/en/controls/OrbitControls
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         
-        // this.settings();
+        this.settings();
         this.setupResize();
         this.mouseMove();
 
         this.addObjects();
         this.resize();
-        this.render();
+        this.animate();
         this.handleImages();
     }
 
@@ -85,16 +92,15 @@ export default class Sketch {
         });
     }
 
-    mouseMove(){
+    mouseMove() {
         let that = this;
-        this.container.addEventListener('mousemove', ( e ) => {
-            // mousemove / touchmove
-            this.mouse.x = ( e.clientX / window.innerWidth ) ;
-            this.mouse.y = 1. - ( e.clientY / window.innerHeight );
+        this.container.addEventListener('mousemove', (e) => {
+            this.mouse.x = (e.clientX / this.width);
+            this.mouse.y = 1. - (e.clientY / this.Height);
         });
     }
 
-    settings(){
+    settings() {
         let that = this;
         this.settings = {
             progress: 0
@@ -103,24 +109,24 @@ export default class Sketch {
         this.gui.add(this.settings, "progress", 0, 1, 0.01);
     }
 
-    setupResize(){
+    setupResize() {
         window.addEventListener('resize', this.resize.bind(this));
     }
 
-    resize(){
+    resize() {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.renderer.setSize(this.width, this.height);
         this.camera.aspect = this.width / this.height;
 
-        this.imageAspect = 853/1280;
+        this.imageAspect = 853 / 1280;
         let a1, a2;
-        if(this.camera.aspect > this.imageAspect) {
-            a1 = (this.width/this.height) * this.imageAspect;
+        if (this.camera.aspect > this.imageAspect) {
+            a1 = (this.width / this.height) * this.imageAspect;
             a2 = 1;
         } else {
             a1 = 1;
-            a2 = (this.height/this.width) / this.imageAspect;
+            a2 = (this.height / this.width) / this.imageAspect;
         }
 
         this.material.uniforms.resolution.value.x = this.width;
@@ -131,19 +137,30 @@ export default class Sketch {
         this.camera.updateProjectionMatrix();
     }
 
-    addObjects(){
+    addObjects() {
         let that = this;
-        // this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
         this.material = new THREE.ShaderMaterial({
             extensions: {
                 derivatives: "#extension GL_OES_standard_derivatives : enable"
             },
             side: THREE.DoubleSide,
             uniforms: {
-                time: { type: "f", value: 0 },
-                distanceFromCenter: { type: "f", value: 0 },
-                texture1: { type: "t", value: null },
-                resolution: { type: "v4", value: new THREE.Vector4() },
+                time: {
+                    type: "f",
+                    value: 0
+                },
+                distanceFromCenter: {
+                    type: "f",
+                    value: 0
+                },
+                texture1: {
+                    type: "t",
+                    value: null
+                },
+                resolution: {
+                    type: "v4",
+                    value: new THREE.Vector4()
+                },
                 uvRate1: {
                     value: new THREE.Vector2(1, 1)
                 }
@@ -164,17 +181,19 @@ export default class Sketch {
         this.render();
     }
 
-    render(){
+    animate() {
         this.time += 0.05;
-        
+
         if (this.materials) {
             this.materials.forEach(m => {
                 m.uniforms.time.value = this.time;
             });
+        } else {
+            this.material.uniforms.time.value = this.time;
         }
-        
-        // this.material.uniforms.time.value = this.time;
-        requestAnimationFrame(this.render.bind(this));
+
+        requestAnimationFrame(this.animate.bind(this));
+        this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
 };
