@@ -1,15 +1,25 @@
+// https://threejs.org/
 import * as THREE from 'three';
-// import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js"
 
-import fragment from './shader/fragment.glsl'
-import vertex from './shader/vertex.glsl'
-import * as dat from 'dat.gui'
+// https://threejs.org/docs/#examples/en/loaders/GLTFLoader
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-// import { TimelineMax } from "gsap";
+// Shaders
+import fragment from './shader/fragment.glsl';
+import vertex from './shader/vertex.glsl';
+
+// DAT GUI - https://github.com/dataarts/dat.gui
+import * as dat from 'dat.gui';
+
+// GSAP - https://greensock.com/docs/v3/GSAP/Timeline
+import { Timeline } from 'gsap/gsap-core';
+
+// Controls -  https://threejs.org/docs/?q=OrbitControls#examples/en/controls/OrbitControls
 import {
     OrbitControls
 } from 'three/examples/jsm/controls/OrbitControls'
 
+// Class - Sketch
 export default class Sketch {
     constructor(options) {
         // Props
@@ -32,10 +42,10 @@ export default class Sketch {
         this.setControls();
         this.createMaterial();
         this.createObjects();
+        this.createGUI();
         this.bindEvents();
         this.handleResize();
         this.animate();
-        this.createGUI();
     }
 
     createGUI() {
@@ -48,8 +58,10 @@ export default class Sketch {
             folder.add(mesh.rotation, "y", 0, rotationMax, 0.01); 
             folder.add(mesh.rotation, "z", 0, rotationMax, 0.01); 
             folder.add(mesh, "visible", 0, 1, 0.01); 
-            folder.open();
+            // folder.close();
         });
+
+        this.GUI.close();
     }
 
     setScene() {

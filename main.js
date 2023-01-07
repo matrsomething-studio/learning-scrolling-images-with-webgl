@@ -48,5 +48,5 @@ function animate() {
 
 animate();
 
-let nav = document.querySelector('nav');
+let nav = document.querySelector('.nav');
 let navs = [...nav.querySelectorAll('li')];
