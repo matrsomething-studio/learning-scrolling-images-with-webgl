@@ -35,7 +35,6 @@ export default class Sketch {
         this.materials = [];
         this.tl = gsap.timeline();
         
-    
         // Methods
         this.setScene();
         this.setRenderer();

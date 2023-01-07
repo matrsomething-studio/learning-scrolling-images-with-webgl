@@ -44,7 +44,6 @@ function animate() {
     position += Math.sign(diff) * Math.pow(Math.abs(diff), 0.7) * 0.035;
 
     // Update DOM
-    // wrap.style.transform = `translate(0, ${-position * 100 + 50}px)`;
     window.requestAnimationFrame(animate);
 }
 
