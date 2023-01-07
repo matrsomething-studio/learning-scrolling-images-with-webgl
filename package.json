@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "sass": "^1.57.1",
     "vite": "^4.0.0",
     "vite-plugin-glsl": "^1.0.2"
   },

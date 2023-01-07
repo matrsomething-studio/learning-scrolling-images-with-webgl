@@ -12,7 +12,7 @@ import vertex from './shader/vertex.glsl';
 import * as dat from 'dat.gui';
 
 // GSAP - https://greensock.com/docs/v3/GSAP/Timeline
-import { Timeline } from 'gsap/gsap-core';
+import { gsap } from 'gsap';
 
 // Controls -  https://threejs.org/docs/?q=OrbitControls#examples/en/controls/OrbitControls
 import {
@@ -33,6 +33,7 @@ export default class Sketch {
         this.meshGroup = new THREE.Group();
         this.meshes = [];
         this.materials = [];
+        this.tl = gsap.timeline();
         
     
         // Methods
@@ -122,6 +123,9 @@ export default class Sketch {
         this.meshGroup.rotation.x = -.3;
         this.meshGroup.rotation.y = -.3;
         this.meshGroup.rotation.z = -.1;
+
+        this.tl.to(this.meshGroup.rotation, {duration: .33, x: 0, y: 0, z: 0, ease: "easeInOut" });
+        this.tl.pause();
     }
 
     createMaterial() {
