@@ -1,7 +1,7 @@
 import '../styles/main.scss';
 import Sketch from './module';
 
-
+// Props
 const sketch = new Sketch({
     dom: document.querySelector("#scene")
 });
@@ -15,12 +15,13 @@ let elems = [...document.querySelectorAll('.n')];
 let objs = Array(5).fill({
     dist: 0
 });
+let nav = document.querySelector('.nav');
+let navs = [...nav.querySelectorAll('li')];
 
-window.addEventListener('wheel', (e) => {
-    speed += e.deltaY * 0.0003;
-});
+// Methods
+const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-function animate() {
+const animate = () => {
     position += speed;
 
     // Create inertia 
@@ -33,7 +34,6 @@ function animate() {
         elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
         let scale = 1 + 0.24 * o.dist;
         sketch.meshes[i].position.y = (i * 1.2) - (position * 1.2);
-        // sketch.meshes[i].position.x = (i * 1.75) - (position * 1.75);
         sketch.meshes[i].scale.set(scale, scale, scale);
         sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
     });
@@ -45,13 +45,12 @@ function animate() {
 
     // Update DOM
     window.requestAnimationFrame(animate);
-}
+};
 
-animate();
-
-let nav = document.querySelector('.nav');
-let navs = [...nav.querySelectorAll('li')];
-
+// Events
+window.addEventListener('wheel', (e) => {
+    speed += e.deltaY * 0.0003;
+});
 
 nav.addEventListener('mouseover', e => {
     sketch.tl.play();
@@ -60,3 +59,6 @@ nav.addEventListener('mouseover', e => {
 nav.addEventListener('mouseout', e => {
     sketch.tl.reverse();
 });
+
+// Init
+animate();
