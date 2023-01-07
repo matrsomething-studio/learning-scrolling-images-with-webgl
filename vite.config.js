@@ -3,6 +3,10 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [glsl()],
-  publicDir: "assets"
+  root: "src/",
+  publicDir: "assets",
+  build: {
+    outDir: "../dist"
+  },
+  plugins: [glsl()]
 });
