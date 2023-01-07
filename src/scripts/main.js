@@ -1,7 +1,7 @@
 import '../styles/main.scss';
-import Sketch from './module';
+import Sketch from './modules/sketch';
 
-// Props
+// Propsnpm
 const sketch = new Sketch({
     dom: document.querySelector("#scene")
 });
