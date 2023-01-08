@@ -7,7 +7,7 @@ Steps and sandbox for learning Scrolling Images With WebGL and Three.js by Yuri 
 
 
 ## Build System
-Project uses (Vite)[https://vitejs.dev/] for base architecture and a development environment.
+Project uses [Vite](https://vitejs.dev/) for base architecture and a development environment.
 
 **Steps to run local preview dev environment:**
 1. `npm install`
