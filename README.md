@@ -1,5 +1,4 @@
 # Learning: Scrolling Images with WebGL
----
 Steps and sandbox for learning Scrolling Images With WebGL and Three.js by Yuri Artiukh [YouTube Video](https://www.youtube.com/watch?v=ivg603bYDk8) 
 
 ## Dependencies
