@@ -19,8 +19,8 @@ import {
     OrbitControls
 } from 'three/examples/jsm/controls/OrbitControls'
 
-// Class - Sketch
-export default class Sketch {
+// Class - ThreeJSSketch
+export default class ThreeJSSketch {
     constructor(options) {
         // Props
         this.options = options;

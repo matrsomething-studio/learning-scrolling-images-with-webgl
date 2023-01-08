@@ -1,33 +1,36 @@
-// Imports
+// Style(s)
 import '../styles/main.scss';
+
+
+// Utilities
+import * as NoJs from './utils/noJS';
+
+
+// Component(s)
+
+
+// Module(s)
 import { gsap, Quad } from 'gsap';
-import Sketch from './modules/sketch';
+import ThreeJSSketch from './modules/ThreeJSSketch';
+
 
 // Main
 const App = (() => {
     // Props
-    let objs = Array(5).fill({
-        dist: 0
-    });
+    const sketch = new ThreeJSSketch({ dom: document.querySelector("#scene") });
+    const tl2 = gsap.timeline();
 
-    const sketch = new Sketch({
-        dom: document.querySelector("#scene")
-    });
-
-    let tl2 = gsap.timeline();
+    const elems = [...document.querySelectorAll('.n')];
+    const nav = document.querySelector('.nav');
+    const navs = [...nav.querySelectorAll('li')];
+    const objs = Array(5).fill({ dist: 0 });
+    
     let speed = 0;
     let position = 0;
     let rounded = 0;
     let diff = 0;
-    let elems = [...document.querySelectorAll('.n')];
-    let nav = document.querySelector('.nav');
-    let navs = [...nav.querySelectorAll('li')];
+    let scale = 0;
 
-    // Methods
-    function clamp (num, min, max) {
-        Math.min(Math.max(num, min), max);
-    } 
-    
     function animate() {
         position += speed;
         speed *= 0.8;
@@ -38,8 +41,8 @@ const App = (() => {
             o.dist = 1 - o.dist ** 2;
             
             elems[i].style.transform = `scale(${1 + 0.4 * o.dist})`;
-            let scale = 1 + 0.24 * o.dist;
-            
+            scale = 1 + 0.24 * o.dist;
+
             sketch.meshes[i].position.y = (i * 1.2) - (position * 1.2);
             sketch.meshes[i].scale.set(scale, scale, scale);
             sketch.meshes[i].material.uniforms.distanceFromCenter.value = o.dist;
@@ -53,12 +56,14 @@ const App = (() => {
         // Update DOM
         requestAnimationFrame(animate);
     }
-    
+     
     function bindEvents() {
+        // Window
         window.addEventListener('wheel', (e) => {
             speed += e.deltaY * 0.0003;
         });
         
+        // Nav
         nav.addEventListener('mouseover', e => {
             sketch.tl.play();
         });
@@ -86,4 +91,9 @@ const App = (() => {
 })();
 
 
-App.init();
+// Load App
+document.addEventListener('readystatechange', e => {
+    if (e.target.readyState === 'complete') {
+        App.init();
+    }
+});
