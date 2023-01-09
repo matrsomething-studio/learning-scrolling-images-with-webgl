@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 
 // https://threejs.org/docs/#examples/en/loaders/GLTFLoader
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Shaders
 import fragment from '../shaders/distort/fragment.glsl';
