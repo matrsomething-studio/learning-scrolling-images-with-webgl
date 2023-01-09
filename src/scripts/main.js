@@ -29,8 +29,7 @@ const APP = (() => {
 
     function init() {
         NO_JS = new NoJS();
-        SCROLLING_IMAGES = new ScrollingImages({ scene: "#scene" });
-        // ScrollingImages.init();
+        SCROLLING_IMAGES = new ScrollingImages({ sceneContainer: '#scene', imageEls: '.n', navEl: '.nav' });
         bindWindowEvents();
         requestAnimationFrame(raf);
     }

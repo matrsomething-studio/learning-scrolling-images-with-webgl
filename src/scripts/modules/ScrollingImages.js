@@ -5,8 +5,9 @@ import ThreeJSSketch from './ThreeJSSketch';
 export default class ScrollingImages {
     constructor(options) {
         // Props
-        this.sketch = new ThreeJSSketch({ dom: document.querySelector(options.scene) });
-        this.elems = [...document.querySelectorAll('.n')];
+        this.options = options;
+        this.sketch = new ThreeJSSketch({ dom: document.querySelector(this.options.sceneContainer) });
+        this.elems = [...document.querySelectorAll(this.options.imageEls)];
         this.objs = Array(5).fill({ dist: 0 });
         this.speed = 0;
         this.position = 0;
@@ -49,7 +50,7 @@ export default class ScrollingImages {
     }
 
     bindEvents() {
-        const nav = document.querySelector('.nav');
+        const nav = document.querySelector(this.options.navEl);
         const tl2 = gsap.timeline();
 
         nav.addEventListener('mouseover', e => {
