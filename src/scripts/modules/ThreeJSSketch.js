@@ -5,8 +5,8 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Shaders
-import fragment from '../shader/distort/fragment.glsl';
-import vertex from '../shader/distort/vertex.glsl';
+import fragment from '../shaders/distort/fragment.glsl';
+import vertex from '../shaders/distort/vertex.glsl';
 
 // DAT GUI - https://github.com/dataarts/dat.gui
 import * as dat from 'dat.gui';
