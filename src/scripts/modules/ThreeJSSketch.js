@@ -95,7 +95,7 @@ export default class ThreeJSSketch {
     }
 
     createObjects() {
-        this.images = [...document.querySelectorAll('img')];
+        this.images = [...document.querySelectorAll('.n img')];
         this.images.forEach((img, index) => {
             let mat = this.material.clone();
             this.materials.push(mat);
