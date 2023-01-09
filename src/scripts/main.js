@@ -3,30 +3,34 @@ import '../styles/main.scss';
 
 
 // Module(s)
-import * as NoJs from './modules/NoJS';
-import * as ScrollingImages from './modules/ScrollingImages';
+import NoJS from './modules/NoJS';
+import ScrollingImages from './modules/ScrollingImages';
 
 
 // Main
-const App = (() => {
+const APP = (() => {
+    let NO_JS = null;
+    let SCROLLING_IMAGES = null;
+
     function raf() {
-        ScrollingImages.animate();
+        SCROLLING_IMAGES.animate();
         requestAnimationFrame(raf);
     }
 
     function bindWindowEvents() {
         window.addEventListener('wheel', (e) => {
-            ScrollingImages.setSpeed(e.deltaY * 0.0003);
+            SCROLLING_IMAGES.setSpeed(e.deltaY * 0.0003);
         });
 
         window.addEventListener('resize', (e) => {
-            ScrollingImages.resize();
+            SCROLLING_IMAGES.resize();
         });
     }
 
     function init() {
-        NoJs.init();
-        ScrollingImages.init();
+        NO_JS = new NoJS();
+        SCROLLING_IMAGES = new ScrollingImages({ scene: "#scene" });
+        // ScrollingImages.init();
         bindWindowEvents();
         requestAnimationFrame(raf);
     }
@@ -40,6 +44,6 @@ const App = (() => {
 // Load App
 document.addEventListener('readystatechange', e => {
     if (e.target.readyState === 'complete') {
-        App.init();
+        APP.init();
     }
 });
