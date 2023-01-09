@@ -2,11 +2,11 @@
 import * as THREE from 'three';
 
 // https://threejs.org/docs/#examples/en/loaders/GLTFLoader
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Shaders
-import fragment from '../shader/distort/fragment.glsl';
-import vertex from '../shader/distort/vertex.glsl';
+import fragment from '../shaders/distort/fragment.glsl';
+import vertex from '../shaders/distort/vertex.glsl';
 
 // DAT GUI - https://github.com/dataarts/dat.gui
 import * as dat from 'dat.gui';
@@ -15,9 +15,7 @@ import * as dat from 'dat.gui';
 import { gsap, Quad } from 'gsap';
 
 // Controls -  https://threejs.org/docs/?q=OrbitControls#examples/en/controls/OrbitControls
-import {
-    OrbitControls
-} from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 // Class - ThreeJSSketch
 export default class ThreeJSSketch {
@@ -26,8 +24,6 @@ export default class ThreeJSSketch {
         this.options = options;
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.paused = false;
-        this.requestID = null;
         this.time = 0;
         this.speed = 0;
         this.meshGroup = new THREE.Group();
@@ -35,7 +31,6 @@ export default class ThreeJSSketch {
         this.materials = [];
         this.tl = gsap.timeline();
 
-        
         // Methods
         this.setScene();
         this.setRenderer();
@@ -44,9 +39,7 @@ export default class ThreeJSSketch {
         this.createMaterial();
         this.createObjects();
         this.createGUI();
-        this.bindEvents();
         this.handleResize();
-        this.animate();
     }
 
     createGUI() {
@@ -188,20 +181,6 @@ export default class ThreeJSSketch {
         this.camera.updateProjectionMatrix();
     }
 
-    bindEvents() {
-        window.addEventListener('resize', this.handleResize.bind(this));
-    }
-
-    stop() {
-        this.paused = true;
-        cancelAnimationFrame(this.requestID);
-    }
-
-    play() {
-        this.paused = false;
-        this.requestID = requestAnimationFrame(this.animate.bind(this));
-    }
-
     animate() {
         this.time += 0.05;
 
@@ -213,7 +192,6 @@ export default class ThreeJSSketch {
             this.material.uniforms.time.value = this.time;
         }
 
-        this.play();
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
