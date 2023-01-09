@@ -1,5 +1,15 @@
-// DOM
+// Utilities
+
+
+// Component(s)
+
+
+// Module(s)
+
+
+// Prop(s)
 const HTML = document.querySelector('html');
+
 
 // Method(s)
 const isEnabled = () => {
