@@ -15,6 +15,7 @@ export default class ScrollingImages {
         this.diff = 0;
         this.scale = 0;
 
+        // Methods
         this.bindEvents();
         this.animate();
     }

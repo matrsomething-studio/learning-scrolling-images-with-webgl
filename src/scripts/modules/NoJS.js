@@ -14,7 +14,7 @@ export default class NoJS {
 		this.disable();
 	}
 	
-
+	// Methods
 	isEnabled() {
 		return !this.HTML.classList.contains('no-js') ? true : false;
 	};

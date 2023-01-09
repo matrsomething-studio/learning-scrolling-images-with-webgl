@@ -31,7 +31,6 @@ export default class ThreeJSSketch {
         this.materials = [];
         this.tl = gsap.timeline();
 
-        
         // Methods
         this.setScene();
         this.setRenderer();

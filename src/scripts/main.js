@@ -11,10 +11,11 @@ import ScrollingImages from './modules/ScrollingImages';
 const APP = (() => {
     let NO_JS = null;
     let SCROLLING_IMAGES = null;
+    let RAFID = null;
 
     function raf() {
         SCROLLING_IMAGES.animate();
-        requestAnimationFrame(raf);
+        RAFID = requestAnimationFrame(raf);
     }
 
     function bindWindowEvents() {
