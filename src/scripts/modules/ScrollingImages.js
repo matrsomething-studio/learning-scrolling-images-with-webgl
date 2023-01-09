@@ -11,11 +11,7 @@ import ThreeJSSketch from './ThreeJSSketch';
 
 // Props
 const sketch = new ThreeJSSketch({ dom: document.querySelector("#scene") });
-const tl2 = gsap.timeline();
-
 const elems = [...document.querySelectorAll('.n')];
-const nav = document.querySelector('.nav');
-const navs = [...nav.querySelectorAll('li')];
 const objs = Array(5).fill({ dist: 0 });
 
 let speed = 0;
@@ -57,6 +53,10 @@ const setSpeed = (value) => {
 };
 
 const bindEvents = () => {
+    const nav = document.querySelector('.nav');
+    const navs = [...nav.querySelectorAll('li')];
+    const tl2 = gsap.timeline();
+
     // Nav
     nav.addEventListener('mouseover', e => {
         sketch.tl.play();
