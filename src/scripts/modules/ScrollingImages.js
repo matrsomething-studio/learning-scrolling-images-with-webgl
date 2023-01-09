@@ -2,6 +2,7 @@
 import { gsap, Quad } from 'gsap';
 import ThreeJSSketch from './ThreeJSSketch';
 
+// Class - ScrollingImages
 export default class ScrollingImages {
     constructor(options) {
         // Props

@@ -52,7 +52,6 @@ export default class ThreeJSSketch {
             folder.add(mesh.rotation, "y", 0, rotationMax, 0.01); 
             folder.add(mesh.rotation, "z", 0, rotationMax, 0.01); 
             folder.add(mesh, "visible", 0, 1, 0.01); 
-            // folder.close();
         });
 
         this.GUI.close();
