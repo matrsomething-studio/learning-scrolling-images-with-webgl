@@ -52,7 +52,6 @@ export default class ThreeJSSketch {
             folder.add(mesh.rotation, "y", 0, rotationMax, 0.01); 
             folder.add(mesh.rotation, "z", 0, rotationMax, 0.01); 
             folder.add(mesh, "visible", 0, 1, 0.01); 
-            // folder.close();
         });
 
         this.GUI.close();
@@ -96,7 +95,7 @@ export default class ThreeJSSketch {
     }
 
     createObjects() {
-        this.images = [...document.querySelectorAll('img')];
+        this.images = [...document.querySelectorAll('.n img')];
         this.images.forEach((img, index) => {
             let mat = this.material.clone();
             this.materials.push(mat);
